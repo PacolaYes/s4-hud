@@ -3,6 +3,7 @@
 -- like hit sonic game, spongebob squarepants supersponge
 -- -Pac
 
+local CH = customhud
 local titleTics = 0
 
 addHook("ThinkFrame", function()
@@ -189,7 +190,7 @@ local function drawFrontChars(v)
 end
 
 -- why cant stjr give us anything
-addHook("HUD", function(v)
+CH.SetupItem("titlescreen", "S4HUD", function(v)
 	if chaotix -- chaotix has their own title screen, so ignore
 	or S4HUD.disableTitle then return end
 	
