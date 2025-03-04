@@ -41,10 +41,10 @@ CH.SetupItem("lives", "S4HUD", function(v, p)
 	local yPos = lifeIcon.y + charGFX.topoffset * lifeIcon.scale
 	for i = 1, 4 do
 		local num = i%2 == 0 and -1 or 1
-		local x = i <= 2 and num*2 or 0
-		local y = i > 2 and num*2 or 0
+		local x = i <= 2 and num or 0
+		local y = i > 2 and num or 0
 		
 		v.drawScaled(xPos + x * lifeIcon.scale, yPos + y * lifeIcon.scale, lifeIcon.scale, charGFX, flags, v.getColormap(TC_ALLWHITE) )
 	end
-	v.drawScaled(xPos, yPos, lifeIcon.scale, charGFX, flags, v.getColormap(p.skin, p.skincolor) )
+	v.drawScaled(xPos, yPos, lifeIcon.scale, charGFX, flags, v.getColormap((p.mo and p.mo.valid and p.mo.colorized) and TC_RAINBOW or p.skin, (p.mo and p.mo.valid) and p.mo.color or p.skincolor) )
 end)
