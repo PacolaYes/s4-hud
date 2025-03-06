@@ -8,7 +8,7 @@ local cachedPatches = {}
 -- this isn't even used in the old main hud code because
 -- i did stuff or something previously like idk
 -- my code is mostly all jank anyways :P
-function taebl:getPatch(v, patch)
+function taebl.getPatch(v, patch)
 	if not v or not patch then return end
 	
 	if not (cachedPatches[patch] and cachedPatches[patch].valid) then
