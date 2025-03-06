@@ -8,7 +8,9 @@ local CH = customhud
 local resConv = FU/2 -- base screenshot uses 640x400, so use this to convert it to 320x200 :P
 
 CH.SetupFont("S4RNG", 0, 4, 33)
+CH.SetupFont("S4SCR", 1, 4, 13)
 
+-- RING COUNTER
 local noRingTime = TICRATE/2
 CH.SetupItem("rings", "S4HUD", function(v, p)
 	local flags = V_SNAPTOTOP|V_SNAPTOLEFT|V_PERPLAYER|V_HUDTRANS
@@ -21,6 +23,7 @@ CH.SetupItem("rings", "S4HUD", function(v, p)
 	end
 end)
 
+-- LIVES COUNTER
 local lifeIcon = {
 	x = 66*resConv,
 	y = 328*resConv,
@@ -31,10 +34,12 @@ CH.SetupItem("lives", "S4HUD", function(v, p)
 	
 	local skin = skins[p.skin]
 	local charGFX
+	local charScale = FU
 	if skin.sprites[SPR2_LIFE].numframes then
 		charGFX = v.getSprite2Patch(p.skin, SPR2_LIFE, (p.powers[pw_super] and true or false))
+		charScale = (skin.flags & SF_HIRES) and skin.highresscale or $
 	else
-		--charGFX = 
+		charGFX = v.cachePatch("DEF1UPPIC")
 	end
 	
 	local xPos = lifeIcon.x + charGFX.leftoffset * lifeIcon.scale
@@ -47,4 +52,12 @@ CH.SetupItem("lives", "S4HUD", function(v, p)
 		v.drawScaled(xPos + x * lifeIcon.scale, yPos + y * lifeIcon.scale, lifeIcon.scale, charGFX, flags, v.getColormap(TC_ALLWHITE) )
 	end
 	v.drawScaled(xPos, yPos, lifeIcon.scale, charGFX, flags, v.getColormap((p.mo and p.mo.valid and p.mo.colorized) and TC_RAINBOW or p.skin, (p.mo and p.mo.valid) and p.mo.color or p.skincolor) )
+end)
+
+-- SCORE
+CH.SetupItem("score", "S4HUD", function(v, p)
+	local flags = V_SNAPTOTOP|V_SNAPTOLEFT|V_PERPLAYER|V_HUDTRANS
+	
+	v.drawScaled(111*resConv, 49*resConv, resConv/2, v.cachePatch("S4E1SCOREBG"), flags)
+	CH.CustomNum(v, 136*resConv, 52*resConv, p.score, "S4SCR", 9, flags, nil, resConv/2)
 end)
