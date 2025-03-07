@@ -1,5 +1,0 @@
-MainCfg
-TitlePicsHide = true
-TitleMap = 0
-TitleScrollSpeed = 5
-titlepicsmode = Old
