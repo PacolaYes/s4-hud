@@ -7,9 +7,14 @@ local CH = customhud
 
 local resConv = FU/2 -- base screenshot uses 640x400, so use this to convert it to 320x200 :P
 
-CH.SetupFont("S4RNG", 0, 4, 33) -- RNG = Rings
-CH.SetupFont("S4SCR", 1, 4, 13) -- SCR = Score
-CH.SetupFont("S4LVS", 1, 4, 27) -- LVS = Lives
+-- font name, kerning, space, mono
+/* CH.SetupFont("S4RNG", 4, 4, 29) -- RNG = Rings
+CH.SetupFont("S4SCR", 2, 4, 13) -- SCR = Score
+CH.SetupFont("S4LVS", 2, 4, 27) -- LVS = Lives */
+CH.SetupFont("S4RNG", 4, 4) -- RNG = Rings
+CH.SetupFont("S4SCR", 2, 4) -- SCR = Score
+CH.SetupFont("S4LVS", 2, 4) -- LVS = Lives
+CH.SetupFont("S4TIM", 2) -- TIM = Time
 
 -- RING COUNTER
 local noRingTime = TICRATE/2
@@ -18,9 +23,9 @@ CH.SetupItem("rings", "S4HUD", function(v, p)
 	v.drawScaled(57*resConv, 40*resConv, resConv/2, v.cachePatch("S4E1RING"), flags)
 	
 	if p.rings ~= 0 then
-		CH.CustomNum(v, 64*resConv, 56*resConv, p.rings, "S4RNG", 3, flags, nil, resConv/2)
+		CH.CustomNum(v, 66*resConv, 56*resConv, p.rings, "S4RNG", 3, flags, nil, resConv/2)
 	elseif leveltime%noRingTime <= noRingTime/2-1 then
-		CH.CustomFontString(v, 64*resConv, 56*resConv, "!!!", "S4RNG", flags, nil, resConv/2)
+		CH.CustomFontString(v, 66*resConv, 56*resConv, "!!!", "S4RNG", flags, nil, resConv/2)
 	end
 end)
 
@@ -58,7 +63,7 @@ CH.SetupItem("lives", "S4HUD", function(v, p)
 	
 	v.drawString(99*resConv, 328*resConv, skin.hudname, flags, "small-fixed")
 	v.drawScaled(99*resConv, 343*resConv, resConv/2, v.cachePatch("S4E1LIFEX"), flags)
-	local numScale = resConv/2 + resConv/5
+	local numScale = resConv/2 + resConv/6
 	--CH.CustomNum(v, 113*resConv, 353*resConv - 28 * numScale, p.lives, "S4LVS", 3, flags, nil, numScale)
 	CH.CustomNum(v, 113*resConv, 339*resConv, p.lives, "S4LVS", 3, flags, nil, numScale)
 end)
@@ -69,4 +74,16 @@ CH.SetupItem("score", "S4HUD", function(v, p)
 	
 	v.drawScaled(111*resConv, 49*resConv, resConv/2, v.cachePatch("S4E1SCOREBG"), flags)
 	CH.CustomNum(v, 136*resConv, 52*resConv, p.score, "S4SCR", 9, flags, nil, resConv/2)
+end)
+
+-- TIME
+CH.SetupItem("time", "S4HUD", function(v, p)
+	local flags = V_SNAPTOTOP|V_SNAPTOLEFT|V_PERPLAYER|V_HUDTRANS
+	
+	v.drawScaled(120*resConv, 63*resConv, resConv/2, v.cachePatch("S4E1TIMEBG"), flags)
+	local mins = G_TicsToMinutes(p.realtime, true)
+	local secs = string.format("%02d", G_TicsToSeconds(p.realtime))
+	local centi = string.format("%02d", G_TicsToCentiseconds(p.realtime))
+	local str = mins+"'"+secs+'"'+centi
+	CH.CustomFontString(v, 150*resConv, 73*resConv, str, "S4TIM", flags, nil, resConv/2)
 end)
