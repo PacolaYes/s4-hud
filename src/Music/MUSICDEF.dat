@@ -1,6 +1,14 @@
 Lump _TITLE
 Title = Title_Screen
-Alttitle = Sonic_The_Hedgehog_4:_Episode_1
+Alttitle = Sonic_The_Hedgehog_4:_Episode_I
+Authors = Jun_Senoue
+Soundtestpage = 1
+Soundtestcond = 0
+BPM = 140
+
+Lump S4MENU
+Title = Menu
+Alttitle = Sonic_The_Hedgehog_4:_Episode_I_&_II
 Authors = Jun_Senoue
 Soundtestpage = 1
 Soundtestcond = 0

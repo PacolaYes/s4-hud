@@ -2,4 +2,5 @@ MainCfg
 TitlePicsHide = true
 TitleMap = 0
 TitleScrollSpeed = -4
+NumDemos = 0
 titlepicsmode = Old
