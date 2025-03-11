@@ -5,15 +5,55 @@
 
 local CH = customhud
 
+local function getLives(stplyr)
+	if stplyr == nil then return end
+
+	local candrawlives = false;
+	local livescount = -1
+
+	local cv_cooplives = CV_FindVar("cv_cooplives")
+
+	// Co-op and Competition, normal life counter
+	if (G_GametypeUsesLives()) then
+		// Handle cooplives here
+		if ((netgame or multiplayer) and G_GametypeUsesCoopLives() and cv_cooplives.value == 3) then
+			livescount = 0;
+			for p in players.iterate() do
+				if p.spectator
+				or p.lives < 1 then
+					continue;
+				end
+
+				if (p.lives == INFLIVES) then
+					livescount = INFLIVES;
+					break;
+				elseif (livescount < 99) then
+					livescount = $+(p.lives);
+				end
+			end
+		else
+			livescount = (((netgame or multiplayer) and G_GametypeUsesCoopLives() and cv_cooplives.value == 0) and INFLIVES or stplyr.lives);
+		end
+		
+		candrawlives = true
+	// Infinity symbol (Race)
+	elseif (G_PlatformGametype() and not (gametyperules & GTR_LIVES)) then
+		livescount = INFLIVES;
+		candrawlives = true;
+	end
+
+	return livescount, candrawlives
+end
+
 local resConv = FU/2 -- base screenshot uses 640x400, so use this to convert it to 320x200 :P
 
 -- font name, kerning, space, mono
 /* CH.SetupFont("S4RNG", 4, 4, 29) -- RNG = Rings
 CH.SetupFont("S4SCR", 2, 4, 13) -- SCR = Score
 CH.SetupFont("S4LVS", 2, 4, 27) -- LVS = Lives */
-CH.SetupFont("S4RNG", 4, 4) -- RNG = Rings
-CH.SetupFont("S4SCR", 2, 4) -- SCR = Score
-CH.SetupFont("S4LVS", 2, 4) -- LVS = Lives
+CH.SetupFont("S4RNG", 4) -- RNG = Rings
+CH.SetupFont("S4SCR", 2) -- SCR = Score
+CH.SetupFont("S4LVS", 2) -- LVS = Lives
 CH.SetupFont("S4TIM", 2) -- TIM = Time
 
 -- RING COUNTER
@@ -65,7 +105,9 @@ CH.SetupItem("lives", "S4HUD", function(v, p)
 	v.drawScaled(99*resConv, 343*resConv, resConv/2, v.cachePatch("S4E1LIFEX"), flags)
 	local numScale = resConv/2 + resConv/6
 	--CH.CustomNum(v, 113*resConv, 353*resConv - 28 * numScale, p.lives, "S4LVS", 3, flags, nil, numScale)
-	CH.CustomNum(v, 113*resConv, 339*resConv, p.lives, "S4LVS", 3, flags, nil, numScale)
+
+	local lives = getLives(p)
+	CH.CustomNum(v, 113*resConv, 339*resConv, lives, "S4LVS", 3, flags, nil, numScale)
 end)
 
 -- SCORE
