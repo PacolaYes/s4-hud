@@ -960,8 +960,8 @@ end
 ---@param fontName string
 ---@param flags number
 ---@param align string
----@param scale fixed_t
----@param color number
+---@param [scale] fixed_t
+---@param [color] number
 function customhud.CustomFontString(v, x, y, str, fontName, flags, align, scale, color)
 	if not (type(str) == "string") then
 		warn("No string given in customhud.CustomFontString");
@@ -1074,7 +1074,7 @@ end
 ---@param flags number?
 ---@param align string?
 ---@param scale number?
----@param color number?
+---@param [color] number?
 ---@return nil
 function customhud.CustomNum(v, x, y, num, fontName, padding, flags, align, scale, color)
 	local str = "";
