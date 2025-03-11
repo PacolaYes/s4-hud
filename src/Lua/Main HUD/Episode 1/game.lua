@@ -11,7 +11,7 @@ local function getLives(stplyr)
 	local candrawlives = false;
 	local livescount = -1
 
-	local cv_cooplives = CV_FindVar("cv_cooplives")
+	local cv_cooplives = CV_FindVar("cooplives")
 
 	// Co-op and Competition, normal life counter
 	if (G_GametypeUsesLives()) then
