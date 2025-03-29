@@ -13,6 +13,7 @@ local BGTime = TICRATE/2
 
 CH.SetupFont("S4TC", -4, 16)
 CH.SetupFont("S4ACT", 0, 16)
+CH.SetupFont("S4SUB", 0, 8)
 
 local fontScale = FixedMul(resConv, 65*FU/100)
 
@@ -101,7 +102,38 @@ CH.SetupItem("stagetitle", "S4HUD", function(v, p, tics, endtic)
 		CH.CustomNum(v, actX + 90*resConv, 160*resConv, mh.actnum, "S4ACT", 0, V_SNAPTORIGHT|V_PERPLAYER, nil, FixedMul(resConv, FU+FU/2))
 	end
 	
+	uTics = max($-(5 + 5), 0) -- literally the same as the other one :P
+	
+	-- SUBTITLE (The Adventure Begins.)
+	if mh and mh.subttl and #mh.subttl > 0
+	and uTics > 0 then
+		local subtitleTable = {
+			x = 194*resConv,
+			y = 300*resConv,
+			scale = (resConv / 2) * 3,
+			trans = 10 -- stands for transparency, i think thats a bit obvious, but gotta make sure!!
+		}
+		
+		subtitleTable.x = $ + (CH.CustomFontStringWidth(v, mh.subttl, "S4SUB", subtitleTable.scale) / 4) -- i didnt wanna have to do this but idk how else i'd do thiS GRAHH
+		subtitleTable.y = $ - (29*subtitleTable.scale / 2) -- so it'd be the right position and i don't have to do math every time i change something about scale or position :P
+		
+		local subTics = min(uTics, 5) -- stands for SUBtitle :P
+		
+		-- in this case scale will always be triple :P
+		-- FixedMul(subTics*FU, 6*FU / 10) should be translated to
+		-- subTics * 0.6
+		-- which should make it so when subTics is equals to 5
+		-- it'd become 3 instead, so it'd make the text be normal scaled :P
+		subtitleTable.scale = FixedDiv($, FixedMul(subTics*FU, 6*FU / 10))
+		subtitleTable.trans = 10 - (subTics * 2)
+		
+		if subtitleTable.trans < 10 then
+			local verticalCenter = 29*subtitleTable.scale / 2
+			
+			CH.CustomFontString(v, subtitleTable.x, subtitleTable.y+verticalCenter, mh.subttl, "S4SUB", V_SNAPTOBOTTOM|V_SNAPTOLEFT|V_ADD|(subtitleTable.trans << V_ALPHASHIFT)|V_PERPLAYER, "center", subtitleTable.scale)
+		end
+	end
+	
 	-- STR = 65%?
 	-- ACT = 60%
-	-- x = 400, 194
 end, "titlecard")
