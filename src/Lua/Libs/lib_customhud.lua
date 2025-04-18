@@ -979,9 +979,10 @@ end
 ---@param fontName string
 ---@param flags number
 ---@param scale fixed_t
----@param color number
+---@param color number?
+---@param translation string?
 ---@return number|nil
-function customhud.CustomFontChar(v, x, y, charByte, fontName, flags, scale, color)
+function customhud.CustomFontChar(v, x, y, charByte, fontName, flags, scale, color, translation)
 	if not (type(charByte) == "number") then
 		warn("No character byte given in customhud.CustomFontChar");
 		return;
@@ -1022,8 +1023,8 @@ function customhud.CustomFontChar(v, x, y, charByte, fontName, flags, scale, col
 	end
 
 	local wc = nil;
-	if (color) then
-		wc = v.getColormap(TC_DEFAULT, color);
+	if (color or translation) then
+		wc = v.getColormap(TC_DEFAULT, color or 0, translation);
 	end
 
 	local patch = customhud.GetFontPatch(v, font, charByte);
@@ -1062,8 +1063,9 @@ end
 ---@param flags number
 ---@param align string
 ---@param scale fixed_t
----@param color number
-function customhud.CustomFontString(v, x, y, str, fontName, flags, align, scale, color)
+---@param color number?
+---@param translation string?
+function customhud.CustomFontString(v, x, y, str, fontName, flags, align, scale, color, translation)
 	if not (type(str) == "string") then
 		warn("No string given in customhud.CustomFontString");
 		return;
@@ -1100,8 +1102,8 @@ function customhud.CustomFontString(v, x, y, str, fontName, flags, align, scale,
 	end
 
 	local wc = nil;
-	if (color) then
-		wc = v.getColormap(TC_DEFAULT, color);
+	if (color or translation) then
+		wc = v.getColormap(TC_DEFAULT, color or 0, translation);
 	end
 
 	local nextx = x;
@@ -1114,7 +1116,7 @@ function customhud.CustomFontString(v, x, y, str, fontName, flags, align, scale,
 
 	for i = 1,str:len() do
 		local nextByte = str:byte(i,i);
-		nextx = customhud.CustomFontChar(v, nextx, y, nextByte, fontName, flags, scale, color);
+		nextx = customhud.CustomFontChar(v, nextx, y, nextByte, fontName, flags, scale, color, translation);
 	end
 end
 
@@ -1176,8 +1178,9 @@ end
 ---@param align string?
 ---@param scale number?
 ---@param color number?
+---@param translation string?
 ---@return nil
-function customhud.CustomNum(v, x, y, num, fontName, padding, flags, align, scale, color)
+function customhud.CustomNum(v, x, y, num, fontName, padding, flags, align, scale, color, translation)
 	local str = "";
 
 	if (padding ~= nil) then
@@ -1186,7 +1189,7 @@ function customhud.CustomNum(v, x, y, num, fontName, padding, flags, align, scal
 		str = string.format("%d", num);
 	end
 
-	return customhud.CustomFontString(v, x, y, str, fontName, flags, align, scale, color);
+	return customhud.CustomFontString(v, x, y, str, fontName, flags, align, scale, color, translation);
 end
 
 --#endregion
